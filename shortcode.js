@@ -142,7 +142,9 @@ function getOutputDir() {
 
 function FontAwesomeIcon(outputPath) {
   const outputDir = outputPath ?? getOutputDir();
-  fs.mkdirSync(outputDir);
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir);
+  }
   return ({ name, type = "solid", tag = "i", ...rest }) => {
     if (!TYPES.includes(type)) {
       console.warn(
