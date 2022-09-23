@@ -1,6 +1,6 @@
 const {
-  FontAwesomeIcon,
+  FontAwesomeShortcodes,
   getAvailableIcons,
-  isIconAvailable
+  isIconAvailable,
 } = require("./shortcode");
-module.exports = { FontAwesomeIcon, getAvailableIcons, isIconAvailable };
+module.exports = { FontAwesomeShortcodes, getAvailableIcons, isIconAvailable };
