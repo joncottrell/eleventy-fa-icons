@@ -21,40 +21,10 @@ function _getAttrs(obj) {
   return attrs;
 }
 
-// get path of current working directory
-const thePath = path.resolve(process.cwd());
+const svgFile = "fa-icons.svg";
 
-// set up possible build directory names
-const _site = "./_site";
-const dist = "./dist";
-const public = "./public";
-const build = "./build";
-
-// set up output folder
-let outputFolder;
-
-if (fs.existsSync(`${thePath}/${_site}`)) {
-  // if _site directory exists, use this for output path
-  outputFolder = _site;
-} else if (fs.existsSync(`${thePath}/${dist}`)) {
-  // if dist directory exists, use this for output path
-  outputFolder = dist;
-} else if (fs.existsSync(`${thePath}/${public}`)) {
-  // if public directory exists, use this for output path
-  outputFolder = public;
-} else if (fs.existsSync(`${thePath}/${build}`)) {
-  // if build directory exists, use this for output path
-  outputFolder = build;
-} else {
-  // none of the above match
-  console.log("Directory not found.");
-}
-
-function writeSvg() {
-  const outputPath = `${path.resolve(
-    process.cwd(),
-    outputFolder
-  )}/fa-icons.svg`;
+function writeSvg(outputFolder) {
+  const outputPath = `${path.resolve(process.cwd(), outputFolder)}/${svgFile}`;
   const symbolsHtml = `${Object.keys(symbols)
     .map((iconId) => symbols[iconId])
     .join(`\n`)}`;
@@ -157,50 +127,52 @@ function isIconAvailable(name, type) {
   }
 }
 
-function FontAwesomeIcon({ name, type = "solid", tag = "i", ...rest }) {
-  if (!TYPES.includes(type)) {
-    console.warn(
-      `FontAwesomeIcon:: you specified the type ${type} for the icon ${name}. The "type" parameter must be one of: ${LIST_FORMATTER.format(
-        TYPES
-      )}. Setting the type to be "solid".`
-    );
-    type = "solid";
-  }
-  const faName = camelCase(name, { pascalCase: true });
-  const iconName = `fa${faName}`;
-  let iconSet = getIconSet(type);
-  let attrClass = rest.class ? ` ${rest.class}` : ``;
-  delete rest.class;
-
-  let attrs = _getAttrs(rest);
-  let faIcon = icon(iconSet[iconName], { symbol: true });
-  if (!faIcon) {
-    const newType = type === "solid" ? "regular" : "solid";
-    iconSet = getIconSet(newType);
-    faIcon = icon(iconSet[iconName], { symbol: true });
-    if (!faIcon) {
+function FontAwesomeShortcodes(outputPath) {
+  return ({ name, type = "solid", tag = "i", ...rest }) => {
+    if (!TYPES.includes(type)) {
       console.warn(
-        `FontAwesomeIcon:: you tried to use the icon ${name} with type ${type}, but it doesn't exist in the free version of FontAwesome. You can check available types in your  .eleventy.js file - see the docs.`
+        `FontAwesomeIcon:: you specified the type ${type} for the icon ${name}. The "type" parameter must be one of: ${LIST_FORMATTER.format(
+          TYPES
+        )}. Setting the type to be "solid".`
       );
-      return `<${tag} class="icon${attrClass}"${attrs}>${iconName}</${tag}>`;
-    } else {
-      console.warn(
-        `FontAwesomeIcon:: you tried to use the icon ${name} with type ${type}, but it didn't exist. Used the ${newType} version instead.`
-      );
+      type = "solid";
     }
-  }
+    const faName = camelCase(name, { pascalCase: true });
+    const iconName = `fa${faName}`;
+    let iconSet = getIconSet(type);
+    let attrClass = rest.class ? ` ${rest.class}` : ``;
+    delete rest.class;
 
-  let faIconId = `${faIcon.prefix}-fa-${faIcon.iconName}`;
-  let svgSymbol;
+    let attrs = _getAttrs(rest);
+    let faIcon = icon(iconSet[iconName], { symbol: true });
+    if (!faIcon) {
+      const newType = type === "solid" ? "regular" : "solid";
+      iconSet = getIconSet(newType);
+      faIcon = icon(iconSet[iconName], { symbol: true });
+      if (!faIcon) {
+        console.warn(
+          `FontAwesomeIcon:: you tried to use the icon ${name} with type ${type}, but it doesn't exist in the free version of FontAwesome. You can check available types in your  .eleventy.js file - see the docs.`
+        );
+        return `<${tag} class="icon${attrClass}"${attrs}>${iconName}</${tag}>`;
+      } else {
+        console.warn(
+          `FontAwesomeIcon:: you tried to use the icon ${name} with type ${type}, but it didn't exist. Used the ${newType} version instead.`
+        );
+      }
+    }
 
-  if (!symbols[faIconId]) {
-    svgSymbol = toHtml(
-      icon(iconSet[iconName], { symbol: true }).abstract[0].children[0]
-    );
-    symbols[faIconId] = svgSymbol;
-    writeSvg();
-  }
-  return `<${tag} class="icon${attrClass}"${attrs}><svg><use xlink:href="/fa-icons.svg#${faIconId}"></use></svg></${tag}>`;
+    let faIconId = `${faIcon.prefix}-fa-${faIcon.iconName}`;
+    let svgSymbol;
+
+    if (!symbols[faIconId]) {
+      svgSymbol = toHtml(
+        icon(iconSet[iconName], { symbol: true }).abstract[0].children[0]
+      );
+      symbols[faIconId] = svgSymbol;
+      writeSvg(outputPath);
+    }
+    return `<${tag} class="icon${attrClass}"${attrs}><svg><use xlink:href="/fa-icons.svg#${faIconId}"></use></svg></${tag}>`;
+  };
 }
 
 module.exports = { FontAwesomeIcon, getAvailableIcons, isIconAvailable };

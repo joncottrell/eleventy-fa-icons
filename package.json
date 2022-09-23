@@ -1,13 +1,13 @@
 {
-  "name": "@campj/eleventy-fa-icons",
-  "version": "0.0.7",
-  "repository": "https://github.com/campjefferson/-campj-eleventy-fa-icons.git",
+  "name": "@joncottrell/eleventy-fa-icons",
+  "version": "0.0.8",
+  "repository": "https://github.com/joncottrell/eleventy-fa-icons.git",
   "description": "Camp Jefferson Eleventy FontAwesome Icons",
   "main": "index.js",
   "keywords": [
     "Eleventy"
   ],
-  "author": "Camp Jefferson Dev <dev@campjefferson.com>",
+  "author": "Jonathan Cottrell <jonathan@bravecottrell.com>",
   "license": "MIT",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.27",

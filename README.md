@@ -1,12 +1,12 @@
 # Eleventy FontAwesome Icon
 
-A configurable Eleventy shortcode that outputs FontAwesome icon svgs in a custom svg sprite.
+A configurable Eleventy shortcode that outputs FontAwesome icon svgs in a custom svg sprite. Forked from @campj/eleventy-fa-icons
 
 ## Usage
 
 ### Installation
 
-`npm install --save-dev @campj/eleventy-fa-icons`
+`yarn install --dev @joncottrell/eleventy-fa-icons`
 
 ### Adding to Eleventy
 
@@ -14,7 +14,7 @@ in .eleventy.js:
 
 ```js
 // require
-const { FontAwesomeIcon } = require("@campj/eleventy-fa-icons");
+const { FontAwesomeIcon } = require("@joncottrell/eleventy-fa-icons");
 module.exports = function(config) {
   // Shortcode
   config.addNunjucksShortcode("FontAwesomeIcon", FontAwesomeIcon);
@@ -31,7 +31,6 @@ module.exports = function(config) {
     name = "times",
     type = "solid",
     class = "someClassName",
-    style = "font-size:24px"
 %}
 ```
 
@@ -46,8 +45,8 @@ module.exports = function(config) {
 
 ### CSS
 
-Default styles for an icon can be imported from `@campj/eleventy-fa-icons/icon.css`;
-They are pretty bare bones, so feel free to use them or not:
+Default styles for an icon can be imported from `@joncottrell/eleventy-fa-icons/icon.css`;
+I recommend you use your own:
 
 ```css
 .icon svg {
@@ -85,7 +84,7 @@ getAvailableIcons("brand"); // outputs a list of icon names for the 'brand' type
 #### Usage
 
 ```js
-const { isIconAvailable } = require("@campj/eleventy-fa-icons");
+const { isIconAvailable } = require("@joncottrell/eleventy-fa-icons");
 // checks whether the icon "times" is available in the "regular" type
 isIconAvailable("times", "regular");
 ```
