@@ -17,10 +17,24 @@ in .eleventy.js:
 const { FontAwesomeIcon } = require("@joncottrell/eleventy-fa-icons");
 module.exports = function(config) {
   // Shortcode
-  config.addNunjucksShortcode("FontAwesomeIcon", FontAwesomeIcon);
+  config.addNunjucksShortcode("FontAwesomeIcon", FontAwesomeIcon());
   //
 };
 ```
+
+Optionally you can pass the ouputDir into `FontAwesomeIcon` if you aren't using the default `_site`. E.g:
+
+```js
+// require
+const { FontAwesomeIcon } = require("@joncottrell/eleventy-fa-icons");
+module.exports = function(config) {
+  // Shortcode
+  config.addNunjucksShortcode("FontAwesomeIcon", FontAwesomeIcon("dist"));
+  //
+};
+```
+
+Note: If you have any idea on how to set the output directory more cleanly, I'm all ears, feel free to send a PR or give me a suggestion.
 
 ### In any nunjucks template file:
 

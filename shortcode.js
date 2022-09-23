@@ -86,7 +86,7 @@ function getAvailableIcons(type, log = true) {
     .filter(Boolean);
   if (log) {
     console.log(
-      `FontaAwesomeIcon:: available icons for the type '${type}' are:\n${LIST_FORMATTER_TYPES.format(
+      `FontAwesomeIcon:: available icons for the type '${type}' are:\n${LIST_FORMATTER_TYPES.format(
         availableIcons
       )}`
     );
@@ -127,7 +127,22 @@ function isIconAvailable(name, type) {
   }
 }
 
-function FontAwesomeShortcodes(outputPath) {
+function getOutputDir() {
+  if (path.resolve(process.cwd(), "_site")) {
+    return "_site";
+  } else if (path.resolve(process.cwd(), "public")) {
+    return "public";
+  } else if (path.resolve(proccess.cwd(), "dist")) {
+    return "dist";
+  } else if (path.resolve(process.cwd(), "build")) {
+    return "build";
+  }
+  return "_site";
+}
+
+function FontAwesomeIcon(outputPath) {
+  const outputDir = outputPath ?? getOutputDir();
+  fs.mkdirSync(outputDir);
   return ({ name, type = "solid", tag = "i", ...rest }) => {
     if (!TYPES.includes(type)) {
       console.warn(
@@ -169,7 +184,7 @@ function FontAwesomeShortcodes(outputPath) {
         icon(iconSet[iconName], { symbol: true }).abstract[0].children[0]
       );
       symbols[faIconId] = svgSymbol;
-      writeSvg(outputPath);
+      writeSvg(outputDir);
     }
     return `<${tag} class="icon${attrClass}"${attrs}><svg><use xlink:href="/fa-icons.svg#${faIconId}"></use></svg></${tag}>`;
   };

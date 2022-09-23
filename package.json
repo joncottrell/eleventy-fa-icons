@@ -1,6 +1,6 @@
 {
   "name": "@joncottrell/eleventy-fa-icons",
-  "version": "0.0.9",
+  "version": "0.1.5",
   "repository": "https://github.com/joncottrell/eleventy-fa-icons.git",
   "description": "Camp Jefferson Eleventy FontAwesome Icons",
   "main": "index.js",
